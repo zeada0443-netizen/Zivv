@@ -1,0 +1,22 @@
+# ═══════════════════════════════════════════════════════
+# ⚡ zivv — koyeb.yaml
+# ملف إعدادات النشر على Koyeb (مجاني — ما بينامش)
+# Koyeb هيقرا الملف ده أوتوماتيك لما تربط الريبو
+# ═══════════════════════════════════════════════════════
+
+name: zivv
+
+services:
+  - name: web
+    type: web
+    instance_type: nano
+    dockerfile_path: Dockerfile
+    ports:
+      - port: 3000
+        protocol: http
+    health_checks:
+      - path: /
+        interval: 60
+        timeout: 10
+    routes:
+      - path: /
