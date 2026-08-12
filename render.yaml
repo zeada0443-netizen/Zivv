@@ -1,0 +1,25 @@
+# ═══════════════════════════════════════════════════════
+# ⚡ zivv — إعدادات النشر على Render (مجاني)
+# ═══════════════════════════════════════════════════════
+# في Render:
+#   1. New → Blueprint (أو Web Service)
+#   2. اربط الريبو بتاعك على GitHub
+#   3. Render هيقرا الملف ده أوتوماتيك
+#   4. حط قيم الـ Environment Variables من لوحة Render
+#      (مش من الكود — زي ما الوثيقة بتقول)
+# ═══════════════════════════════════════════════════════
+
+services:
+  - type: web
+    name: zivv
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn server:app --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: RESEND_API_KEY
+        sync: false        # هتكتبها بنفسك في لوحة Render (سرية)
+      - key: RESEND_FROM
+        value: "zivv <onboarding@resend.dev>"
+      - key: OTP_SALT
+        generateValue: true
