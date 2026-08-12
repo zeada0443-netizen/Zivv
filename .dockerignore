@@ -1,0 +1,7 @@
+# الملفات اللي مش هتتنسخ جوه صورة Docker
+.env
+*.db
+video/
+__pycache__/
+*.pyc
+.git/
