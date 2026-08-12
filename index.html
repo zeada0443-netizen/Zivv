@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>zivv — تسجيل الدخول</title>
+  <meta name="description" content="zivv — تواصل اجتماعي بذكاء وخصوصية">
+  <!--
+    ═══════════════════════════════════════════════════
+    ⚡ zivv — المرحلة 1: صفحة تسجيل الدخول (index.html)
+    ملف الهيكل (HTML) — التنسيقات في css/login.css
+    والمنطق في js/login.js — كل ملف مستقل بمسؤوليته
+    ═══════════════════════════════════════════════════
+
+    حسب وثيقة المتطلبات:
+    ✅ أول صفحة تظهر هي تسجيل الدخول
+    ✅ التسجيل بالبريد الإلكتروني فقط (مفيش Google)
+    ✅ إنشاء حساب: الاسم الأول + اسم العائلة + العمر + الإيميل
+    ✅ منع أقل من 18 سنة
+    ✅ نظام OTP: رمز 6 أرقام، 10 دقائق صلاحية، حد محاولات
+    ✅ المفاتيح (RESEND_API_KEY) مش موجودة في الواجهة أبدًا
+  -->
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <!-- خلفية زخرفية (نجوم + شبكة) -->
+  <div class="bg" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="grid"></div>
+  </div>
+
+  <main class="login-wrap">
+
+    <!-- ═══════════ الشعار ═══════════ -->
+    <div class="brand">
+      <div class="logo">zivv</div>
+      <p class="tagline">تواصل اجتماعي بذكاء وخصوصية 🔒</p>
+    </div>
+
+    <!-- ═══════════ الكارت الرئيسي ═══════════ -->
+    <section class="card" id="card">
+
+      <!-- ───── التبويبات: دخول / حساب جديد ───── -->
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tabLogin" role="tab" aria-selected="true">تسجيل الدخول</button>
+        <button class="tab" id="tabSignup" role="tab" aria-selected="false">حساب جديد</button>
+      </div>
+
+      <!-- ───── رسالة عامة (خطأ/نجاح) ───── -->
+      <div class="alert" id="alert" role="alert" hidden></div>
+
+      <!-- ═══════ نموذج تسجيل الدخول ═══════ -->
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginEmail">البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" placeholder="example@email.com"
+                 autocomplete="email" inputmode="email" required>
+        </div>
+
+        <button type="submit" class="btn-primary" id="sendOtpBtn">
+          <span class="btn-txt">إرسال رمز التحقق</span>
+          <span class="spinner" hidden></span>
+        </button>
+      </form>
+
+      <!-- ═══════ نموذج إنشاء حساب جديد ═══════ -->
+      <form id="signupForm" novalidate hidden>
+        <div class="row2">
+          <div class="field">
+            <label for="suFirst">الاسم الأول</label>
+            <input type="text" id="suFirst" placeholder="مثال: أحمد" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="suLast">اسم العائلة</label>
+            <input type="text" id="suLast" placeholder="مثال: محمود" autocomplete="family-name" required>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="suAge">العمر</label>
+            <input type="number" id="suAge" placeholder="18+" min="1" max="120"
+                   inputmode="numeric" autocomplete="bday" required>
+          </div>
+          <div class="field">
+            <label for="suEmail">البريد الإلكتروني</label>
+            <input type="email" id="suEmail" placeholder="example@email.com"
+                   autocomplete="email" inputmode="email" required>
+          </div>
+        </div>
+
+        <!-- رسالة منع أقل من 18 سنة (بتظهر لو العمر أقل) -->
+        <div class="age-block" id="ageBlock" hidden>
+          ⛔ zivv مخصص للأعمار <b>18 سنة فأكثر</b> فقط — حسب سياسة الأمان.
+        </div>
+
+        <button type="submit" class="btn-primary" id="signupBtn">
+          <span class="btn-txt">إنشاء الحساب وإرسال الرمز</span>
+          <span class="spinner" hidden></span>
+        </button>
+      </form>
+
+      <!-- ═══════ قسم OTP (بيظهر بعد إرسال الرمز) ═══════ -->
+      <div class="otp-section" id="otpSection" hidden>
+        <div class="otp-head">
+          <div>
+            <p class="otp-title">رمز التحقق</p>
+            <p class="otp-sub" id="otpEmail">—</p>
+          </div>
+          <button class="link-btn" id="changeEmailBtn">تغيير</button>
+        </div>
+
+        <!-- 6 خانات للرمز -->
+        <div class="otp-box" id="otpBox">
+          <input type="text" maxlength="1" inputmode="numeric" autocomplete="one-time-code" aria-label="رقم 1">
+          <input type="text" maxlength="1" inputmode="numeric" aria-label="رقم 2">
+          <input type="text" maxlength="1" inputmode="numeric" aria-label="رقم 3">
+          <input type="text" maxlength="1" inputmode="numeric" aria-label="رقم 4">
+          <input type="text" maxlength="1" inputmode="numeric" aria-label="رقم 5">
+          <input type="text" maxlength="1" inputmode="numeric" aria-label="رقم 6">
+        </div>
+
+        <p class="otp-hint">
+          الرمز صالح لمدة <span class="timer" id="otpTimer">10:00</span>
+          <span class="dot-sep">•</span>
+          محاولات متبقية: <span id="attemptsLeft">5</span>
+        </p>
+
+        <button class="btn-primary" id="verifyBtn">
+          <span class="btn-txt">تحقق ودخول 🚀</span>
+          <span class="spinner" hidden></span>
+        </button>
+
+        <button class="btn-ghost" id="resendBtn" disabled>
+          إعادة إرسال الرمز <span id="resendTimer">(60)</span>
+        </button>
+      </div>
+
+      <!-- ───── رسالة القفل المؤقت ───── -->
+      <div class="lock-msg" id="lockMsg" hidden>
+        🔒 تم قفل المحاولات مؤقتًا — جرب بعد <span id="lockTimer">60</span> ثانية
+      </div>
+
+    </section>
+
+    <!-- ═══════════ شارة وضع التطوير ═══════════ -->
+    <!--
+      🧪 دي شارة مؤقتة في وضع التطوير فقط:
+      لسه مفيش سيرفر حقيقي، فبنعرض الرمز على الشاشة عشان تجرب.
+      في المرحلة الجاية (السيرفر + Resend) الشارة دي هتتشال
+      والرمز هيوصل للإيميل الحقيقي.
+    -->
+    <div class="dev-badge" id="devBadge" hidden>
+      🧪 وضع التطوير — رمزك: <b id="devCode">—</b>
+    </div>
+
+    <p class="footer-note">
+      بتسجيل الدخول انت موافق على شروط الاستخدام وسياسة الخصوصية
+    </p>
+
+  </main>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
