@@ -263,12 +263,12 @@ def request_otp():
     if BREVO_API_KEY:
         ok = send_otp_email_brevo(email, code)
         dev_mode = False if ok else True
-        if not ok:
+        if not ok and os.environ.get("DEV_FALLBACK", "0") != "1":
             return jsonify(ok=False, error="send_failed"), 502
     elif RESEND_API_KEY:
         ok = send_otp_email(email, code)
         dev_mode = False if ok else True
-        if not ok:
+        if not ok and os.environ.get("DEV_FALLBACK", "0") != "1":
             return jsonify(ok=False, error="send_failed"), 502
 
     # ✅ الإيميل اتبعت بنجاح → دلوقتي ننشئ الحساب (لو وضع إنشاء جديد)
