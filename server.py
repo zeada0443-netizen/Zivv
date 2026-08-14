@@ -32,7 +32,21 @@ import requests
 
 # ═══════════ الإعدادات ═══════════
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "zivv.db")
+
+
+def _resolve_db_path():
+    """على Vercel (serverless) فولدر المشروع مقروء بس — نستخدم /tmp"""
+    try:
+        test_file = os.path.join(BASE_DIR, ".write_test")
+        with open(test_file, "w") as f:
+            f.write("x")
+        os.remove(test_file)
+        return os.path.join(BASE_DIR, "zivv.db")
+    except OSError:
+        return os.path.join("/tmp", "zivv.db")
+
+
+DB_PATH = os.environ.get("ZIVV_DB_PATH", _resolve_db_path())
 
 # تحميل المتغيرات السرية من ملف .env (لو موجود)
 try:
