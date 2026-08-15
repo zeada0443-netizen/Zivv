@@ -3,29 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>zivv — الرئيسية (قريبًا)</title>
+  <title>zivv — الرئيسية</title>
   <!--
-    ⚡ zivv — المرحلة 2: الصفحة الرئيسية
-    ⏳ دي نسخة مؤقتة عشان التحويل من تسجيل الدخول يشتغل.
-    هنبنيها كاملة في المرحلة الجاية: فيد + حالات + نشر + شريط سفلي.
+    ⚡ zivv — الصفحة الرئيسية الاحترافية
+    تصميم بمعايير فيسبوك وواتساب: شريط علوي + حالات + فيد + دردشة + شريط سفلي
   -->
   <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
 
-  <main class="placeholder">
-    <div class="logo">zivv</div>
-    <h1>الصفحة الرئيسية 🏠</h1>
-    <p>المرحلة 2 — تحت البناء. هنبنيها كاملة في الخطوة الجاية:</p>
-    <ul>
-      <li>✅ فيد المنشورات</li>
-      <li>⬜ شريط الحالات</li>
-      <li>⬜ كارت إنشاء منشور</li>
-      <li>⬜ الشريط السفلي (الرئيسية، Shorts، نشر، دردشة، حسابي، إعدادات)</li>
-    </ul>
-    <p class="session" id="sessionInfo">—</p>
-    <button class="btn" id="logoutBtn">تسجيل الخروج</button>
+  <!-- ═══════════ الشريط العلوي ═══════════ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">zivv</span>
+      <div class="search">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="ابحث في zivv..." id="searchInput">
+      </div>
+      <div class="top-icons">
+        <button class="icon-btn" id="notifBtn" title="الإشعارات">🔔<span class="dot"></span></button>
+        <button class="icon-btn" id="chatBtnHeader" title="الدردشة">💬<span class="dot teal"></span></button>
+        <div class="me-chip" id="meChip" title="حسابي">👤</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════ الحاويات الرئيسية ═══════════ -->
+  <main class="layout">
+
+    <!-- ───── الفيد (الرئيسية) ───── -->
+    <section class="feed" id="feedView">
+
+      <!-- شريط الحالات -->
+      <div class="stories" id="storiesRow">
+        <div class="story-card add" onclick="alert('إضافة حالة جديدة — قريبًا ✨')">
+          <div class="story-avatar plus">＋</div>
+          <span class="story-name">حالتك</span>
+        </div>
+        <div class="story-card" onclick="openStory(0)">
+          <div class="story-ring"><div class="story-avatar" style="background:#0e7490;">م</div></div>
+          <span class="story-name">محمود</span>
+        </div>
+        <div class="story-card" onclick="openStory(1)">
+          <div class="story-ring"><div class="story-avatar" style="background:#4c1d95;">س</div></div>
+          <span class="story-name">سارة</span>
+        </div>
+        <div class="story-card" onclick="openStory(2)">
+          <div class="story-ring"><div class="story-avatar" style="background:#9a3412;">ن</div></div>
+          <span class="story-name">نور</span>
+        </div>
+        <div class="story-card" onclick="openStory(3)">
+          <div class="story-ring"><div class="story-avatar" style="background:#14532d;">أ</div></div>
+          <span class="story-name">أحمد</span>
+        </div>
+        <div class="story-card" onclick="openStory(4)">
+          <div class="story-ring"><div class="story-avatar" style="background:#831843;">ي</div></div>
+          <span class="story-name">يوسف</span>
+        </div>
+      </div>
+
+      <!-- كارت إنشاء منشور -->
+      <div class="card composer">
+        <div class="composer-top">
+          <div class="avatar" id="myAvatar">م</div>
+          <div class="composer-input" onclick="document.getElementById('postModal').classList.add('open')">
+            في إيه الجديد يا بطل؟ ✍️
+          </div>
+        </div>
+        <div class="composer-actions">
+          <button class="c-act" onclick="document.getElementById('postModal').classList.add('open')">🖼️ صورة</button>
+          <button class="c-act" onclick="document.getElementById('postModal').classList.add('open')">🎬 فيديو</button>
+          <button class="c-act" onclick="document.getElementById('postModal').classList.add('open')">🎵 موسيقى</button>
+          <button class="c-act" onclick="document.getElementById('postModal').classList.add('open')">🤖 AI</button>
+        </div>
+      </div>
+
+      <!-- قائمة المنشورات -->
+      <div id="postsList"></div>
+
+      <!-- نهاية الفيد -->
+      <div class="feed-end">— وصلت لآخر المنشورات —</div>
+    </section>
+
+    <!-- ───── الشريط الجانبي (شاشات كبيرة) ───── -->
+    <aside class="sidebar">
+      <div class="card side-card">
+        <h3>اقتراحات أصدقاء</h3>
+        <div class="sugg-row"><div class="avatar" style="background:#0e7490;">م</div><div class="sugg-inf"><b>محمود الشناوي</b><span>⭐ Gold</span></div><button class="mini-btn">إضافة</button></div>
+        <div class="sugg-row"><div class="avatar" style="background:#4c1d95;">س</div><div class="sugg-inf"><b>سارة عادل</b><span>متابعك</span></div><button class="mini-btn">إضافة</button></div>
+        <div class="sugg-row"><div class="avatar" style="background:#9a3412;">ن</div><div class="sugg-inf"><b>نور هشام</b><span>متابعك</span></div><button class="mini-btn">إضافة</button></div>
+      </div>
+      <div class="card side-card">
+        <h3>⚡ نشاط سريع</h3>
+        <p class="side-txt">أحمد أعجب بمنشورك ❤️</p>
+        <p class="side-txt">سارة علّقت على منشورك 💬</p>
+        <p class="side-txt">محمود بدأ متابعتك ⭐</p>
+      </div>
+    </aside>
+
+    <!-- ───── الدردشة (واجهة واتساب) ───── -->
+    <section class="chat-view" id="chatView" hidden>
+      <div class="chat-list" id="chatList"></div>
+      <div class="chat-room" id="chatRoom" hidden>
+        <div class="chat-head" id="chatHead"></div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-input-row">
+          <input type="text" placeholder="اكتب رسالة..." id="chatInput">
+          <button class="send-btn" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── الإشعارات ───── -->
+    <section class="notif-view" id="notifView" hidden>
+      <div class="card side-card">
+        <h3>🔔 الإشعارات</h3>
+        <p class="side-txt">💬 رسالة جديدة من سارة</p>
+        <p class="side-txt">❤️ نور أعجبت بمنشورك</p>
+        <p class="side-txt">👥 طلب صداقة من أحمد</p>
+        <p class="side-txt">⭐ محمود بدأ متابعتك</p>
+        <p class="side-txt">🤖 المساعد الذكي جاهز</p>
+      </div>
+    </section>
+
   </main>
+
+  <!-- ═══════════ الشريط السفلي (ثابت) ═══════════ -->
+  <nav class="bottomnav">
+    <button class="nav-item active" data-view="feed" onclick="switchView('feed')">
+      <span class="ni-icon">🏠</span><span>الرئيسية</span>
+    </button>
+    <button class="nav-item" data-view="shorts" onclick="switchView('shorts')">
+      <span class="ni-icon">⚡</span><span>Shorts</span>
+    </button>
+    <button class="nav-item publish" onclick="document.getElementById('postModal').classList.add('open')">
+      <span class="ni-icon">＋</span><span>نشر</span>
+    </button>
+    <button class="nav-item" data-view="chat" onclick="switchView('chat')">
+      <span class="ni-icon">💬</span><span>دردشة</span>
+    </button>
+    <button class="nav-item" data-view="profile" onclick="switchView('profile')">
+      <span class="ni-icon">👤</span><span>حسابي</span>
+    </button>
+  </nav>
+
+  <!-- ═══════════ Shorts ═══════════ -->
+  <section class="shorts-view" id="shortsView" hidden>
+    <div class="shorts-card">
+      <div class="shorts-media">🎬</div>
+      <p class="shorts-desc">أول فيديو قصير على zivv — قريبًا 🚀</p>
+      <div class="shorts-actions">
+        <button class="s-act" onclick="likeShorts()">❤️ <span id="shortsLikes">1.2K</span></button>
+        <button class="s-act">💬 89</button>
+        <button class="s-act">↗️ مشاركة</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ حسابي ═══════════ -->
+  <section class="profile-view" id="profileView" hidden>
+    <div class="card profile-card">
+      <div class="profile-cover"></div>
+      <div class="profile-avatar" id="profileAvatar">م</div>
+      <h2 id="profileName">مستخدم zivv</h2>
+      <p class="profile-email" id="profileEmail">—</p>
+      <div class="profile-stats">
+        <div><b>0</b><span>منشورات</span></div>
+        <div><b>0</b><span>أصدقاء</span></div>
+        <div><b>0</b><span>متابعون</span></div>
+      </div>
+      <button class="btn-gold" onclick="alert('الاشتراك الذهبي ⭐ — قريبًا!')">⭐ اشتراك Gold</button>
+      <button class="btn-ghost-sm" onclick="alert('الإحصائيات — قريبًا 📊')">📊 الإحصائيات</button>
+      <button class="btn-danger-sm" id="logoutBtn">تسجيل الخروج</button>
+    </div>
+  </section>
+
+  <!-- ═══════════ مودال النشر ═══════════ -->
+  <div class="modal" id="postModal">
+    <div class="modal-box">
+      <div class="modal-head"><h3>إنشاء منشور</h3><button class="x-btn" onclick="document.getElementById('postModal').classList.remove('open')">✕</button></div>
+      <textarea id="postText" placeholder="عايز تنشر إيه؟..." rows="4"></textarea>
+      <div class="modal-actions">
+        <button class="c-act">🖼️</button>
+        <button class="c-act">🎬</button>
+        <button class="c-act">🎵</button>
+        <button class="c-act">🤖 حسن بالـ AI</button>
+      </div>
+      <button class="btn-primary-sm" onclick="publishPost()">نشر 🚀</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ مودال الحالة ═══════════ -->
+  <div class="modal story-modal" id="storyModal">
+    <div class="modal-box story-box">
+      <div class="story-top"><b id="storyOwner">محمود</b><button class="x-btn" onclick="closeStory()">✕</button></div>
+      <div class="story-content" id="storyContent">🌅</div>
+      <p id="storyCaption" class="story-caption">يوم جميل ☀️</p>
+    </div>
+  </div>
 
   <script src="js/home.js"></script>
 </body>
